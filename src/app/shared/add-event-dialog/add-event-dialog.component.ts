@@ -9,25 +9,29 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 })
 export class AddEventDialogComponent implements OnInit {
   appointmentForm: FormGroup;
+  alldayChecked = false;
   constructor(@Inject(MAT_DIALOG_DATA) data,
               private dialogRef: MatDialogRef<AddEventDialogComponent>,
               private fb: FormBuilder) {
     console.log(data);
     this.appointmentForm = this.fb.group({
       apptTitle: data.title,
-      allDay: null
+      allDay: null,
+      start: data.date,
+      end: null
     })
   }
 
   ngOnInit(): void {
   }
   onSaveClick(): void {
-    this.dialogRef.close(this.appointmentForm);
+    this.dialogRef.close(this.appointmentForm.value);
   }
   onCancelClick(): void {
-
+    this.dialogRef.close();
   }
   checkAllday(e): void {
     console.log(e);
+    this.alldayChecked = e;
   }
 }

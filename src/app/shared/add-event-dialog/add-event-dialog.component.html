@@ -3,6 +3,15 @@
     <mat-label>Title</mat-label>
     <input matInput maxlength="256" formControlName="apptTitle">
   </mat-form-field>
+  <mat-form-field *ngIf="alldayChecked" class="" appearance="fill">
+    <mat-date-range-input
+      [rangePicker]="apptDayRange">
+      <input matStartDate placeholder="Start date" formControlName="start">
+      <input matEndDate placeholder="End date" formControlName="end">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="apptDayRange"></mat-datepicker-toggle>
+    <mat-date-range-picker #apptDayRange></mat-date-range-picker>
+  </mat-form-field>
   <mat-checkbox (change)="checkAllday($event.checked)" formControlName="allDay">All day</mat-checkbox>
   <div class="action-btns">
     <button mat-raised-button color="warn" class="cancelBtn" type="button" (click)="onCancelClick()">Cancel</button>

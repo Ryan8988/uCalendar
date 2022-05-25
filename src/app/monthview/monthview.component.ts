@@ -77,7 +77,7 @@ export class MonthviewComponent implements OnInit {
   }
 
   decreaseMonth(): void {
-    this.monthIndex--
+    this.monthIndex--;
     this.generateCalendarDays(this.monthIndex);
   }
 
@@ -89,12 +89,21 @@ export class MonthviewComponent implements OnInit {
   addEvent(i, j): void {
     const index = i * 7 + j;
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '30%';
+    dialogConfig.width = '50%';
     dialogConfig.autoFocus = false;
     dialogConfig.data = this.calendar[index];
     const dialogRef = this.dialog.open(AddEventDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
+      if (!result) {
+        return;
+      }
+      if (result.apptTitle) {
+        this.calendar[index].event.push({
+          time: null,
+          title: result.apptTitle
+        });
+      }
     });
 
 
