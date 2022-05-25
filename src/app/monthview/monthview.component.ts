@@ -87,17 +87,21 @@ export class MonthviewComponent implements OnInit {
   }
 
   addEvent(i, j): void {
-    console.log('i ===' + i + '/// j ===' + j);
+    const index = i * 7 + j;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '30%';
     dialogConfig.autoFocus = false;
+    dialogConfig.data = this.calendar[index];
     const dialogRef = this.dialog.open(AddEventDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
     });
-    const index = i * 7 + j;
-    console.log(this.calendar[index]);
+
 
   }
 
+  editEvent(event, $event) {
+    console.log(event);
+    $event.stopPropagation();
+  }
 }

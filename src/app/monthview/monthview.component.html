@@ -29,7 +29,7 @@
           <strong>{{c.date.getDate()}}</strong>
           <strong *ngIf="c.isToday || (i==0 && j==0) || (c.date.getDate() == 1)"> {{monthNames[c.date.getMonth()]}}</strong>
         </div>
-        <li *ngFor="let event of c.event">{{event.time}} {{event.title}}</li>
+        <li *ngFor="let event of c.event" (click)="editEvent(event, $event)">{{event.time}} {{event.title}}</li>
       </div>
     </td>
   </tr>

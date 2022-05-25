@@ -1,0 +1,4 @@
+.add-event-div {
+  display: flex;
+  flex-direction: column;
+}

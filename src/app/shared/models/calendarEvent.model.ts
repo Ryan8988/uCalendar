@@ -1,6 +1,6 @@
 export class CalendarEvent {
-  title: string;
-  time: string;
+  public title: string;
+  public time: string;
   constructor() {
   }
 }

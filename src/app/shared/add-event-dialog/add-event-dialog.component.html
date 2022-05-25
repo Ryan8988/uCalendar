@@ -1,1 +1,11 @@
-<p>add-event-dialog works!</p>
+<div class="add-event-div" [formGroup]="appointmentForm">
+  <mat-form-field class="" appearance="fill">
+    <mat-label>Title</mat-label>
+    <input matInput maxlength="256" formControlName="apptTitle">
+  </mat-form-field>
+  <mat-checkbox (change)="checkAllday($event.checked)" formControlName="allDay">All day</mat-checkbox>
+  <div class="action-btns">
+    <button mat-raised-button color="warn" class="cancelBtn" type="button" (click)="onCancelClick()">Cancel</button>
+    <button mat-raised-button color="primary" class="saveBtn" type="button" (click)="onSaveClick()">Save</button>
+  </div>
+</div>
