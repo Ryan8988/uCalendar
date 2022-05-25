@@ -10,15 +10,18 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 export class AddEventDialogComponent implements OnInit {
   appointmentForm: FormGroup;
   alldayChecked = false;
+  passedData;
   constructor(@Inject(MAT_DIALOG_DATA) data,
               private dialogRef: MatDialogRef<AddEventDialogComponent>,
               private fb: FormBuilder) {
     console.log(data);
+    this.passedData = data;
     this.appointmentForm = this.fb.group({
       apptTitle: data.title,
       allDay: null,
       start: data.date,
-      end: null
+      end: null,
+      singleDay: data.date
     })
   }
 

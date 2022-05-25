@@ -12,6 +12,13 @@
     <mat-datepicker-toggle matSuffix [for]="apptDayRange"></mat-datepicker-toggle>
     <mat-date-range-picker #apptDayRange></mat-date-range-picker>
   </mat-form-field>
+  <div *ngIf="!alldayChecked" class="not-all-day-div">
+    <mat-form-field appearance="fill">
+      <input matInput [matDatepicker]="picker"  formControlName="singleDay">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
   <mat-checkbox (change)="checkAllday($event.checked)" formControlName="allDay">All day</mat-checkbox>
   <div class="action-btns">
     <button mat-raised-button color="warn" class="cancelBtn" type="button" (click)="onCancelClick()">Cancel</button>
