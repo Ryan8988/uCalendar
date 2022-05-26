@@ -39,6 +39,10 @@
       </mat-select>
     </mat-form-field>
   </div>
+  <mat-form-field class="" appearance="fill">
+    <mat-label>Add Description</mat-label>
+    <textarea matInput placeholder="" formControlName="description"></textarea>
+  </mat-form-field>
   <mat-checkbox (change)="checkAllday($event.checked)" formControlName="allDay">All day</mat-checkbox>
   <div class="action-btns">
     <button mat-raised-button color="warn" class="cancelBtn" type="button" (click)="onCancelClick()">Cancel</button>

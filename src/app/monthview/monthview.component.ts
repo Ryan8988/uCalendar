@@ -73,27 +73,26 @@ export class MonthviewComponent implements OnInit {
     return startingDateOfCalendar;
   }
 
-  increaseMonth(): void {
+  nextMonth(): void {
     this.monthIndex++;
     this.generateCalendarDays(this.monthIndex);
   }
 
-  decreaseMonth(): void {
+  previousMonth(): void {
     this.monthIndex--;
     this.generateCalendarDays(this.monthIndex);
   }
 
-  setCurrentMonth(): void {
+  getCurrentDay(): void {
     this.monthIndex = 0;
     this.generateCalendarDays(this.monthIndex);
   }
 
-  addEvent(c): void {
-    //const index = i * 7 + j;
+  addEvent(day): void {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '50%';
+    dialogConfig.width = '40%';
     dialogConfig.autoFocus = false;
-    dialogConfig.data = c;
+    dialogConfig.data = day;
     const dialogRef = this.dialog.open(AddEventDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
@@ -117,7 +116,7 @@ export class MonthviewComponent implements OnInit {
               title: result.apptTitle,
             });
           }
-        } else {
+        } else { // for single day
           let tgtIndex = -1;
           this.calendar.forEach((item, index) => {
             if (item.date.toDateString() === result.singleDay.toDateString()) {
@@ -128,11 +127,12 @@ export class MonthviewComponent implements OnInit {
           this.calendar[tgtIndex].event.push({
             title: result.apptTitle,
             startTime: result.startTime,
-            endTime: result.endTime
+            endTime: result.endTime,
+            description: result.description
           });
           this.calendar[tgtIndex].event.sort((a,b) => Date.parse('1970/01/01 ' + a.startTime) - Date.parse('1970/01/01 ' + b.startTime));
-          console.log(this.calendar[tgtIndex]);
         }
+        console.log(this.calendar);
       }
     });
 

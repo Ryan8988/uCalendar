@@ -24,7 +24,8 @@ export class AddEventDialogComponent implements OnInit {
       endDay: null,
       singleDay: data.date,
       startTime: null,
-      endTime: null
+      endTime: null,
+      description: null
     });
     this.timeOptions = this.getListofTimeslot();
   }

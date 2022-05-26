@@ -8,7 +8,10 @@
 .cancelBtn {
   margin-right: 5px;
 }
+.not-all-day-div {
+  display: flex;
+  justify-content: space-between;
+}
 .not-all-day-div mat-form-field {
-  width: 25%;
-  margin: 0 10px 0 0;
+  width: calc(100% / 3 - 5px);
 }
