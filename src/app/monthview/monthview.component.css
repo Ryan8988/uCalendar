@@ -18,7 +18,7 @@
 }
 
 .calendar-table td, .calendar-table th {
-  padding: .75rem;
+  padding: 1rem 0;
   vertical-align: top;
   border-top: 1px solid #dee2e6;
 }
@@ -31,6 +31,12 @@
 .calendar-day-div {
   width: 100%;
   height: 100%;
+}
+.calendar-day-div li {
+  background-color: rgb(121, 134, 203);;
+  padding: 0 10px;
+  color: white;
+  margin: 3px 0;
 }
 .calendar-items-wrapper {
   margin-left: -10px;

@@ -37,10 +37,12 @@ export class MonthviewComponent implements OnInit {
 
     for (let i = 0; i < 35; i++) {
       const createEvent = [{
-        time: '4:00 pm',
+        startTime: '4:00 pm',
+        endTime: '4:30 pm',
         title: 'Dr.appt'
       }, {
-        time: '4:30 pm',
+        startTime: '4:30 pm',
+        endTime: '5:30 pm',
         title: 'test'
       }]
       if (i === 5 || i === 10) {
@@ -86,23 +88,51 @@ export class MonthviewComponent implements OnInit {
     this.generateCalendarDays(this.monthIndex);
   }
 
-  addEvent(i, j): void {
-    const index = i * 7 + j;
+  addEvent(c): void {
+    //const index = i * 7 + j;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '50%';
     dialogConfig.autoFocus = false;
-    dialogConfig.data = this.calendar[index];
+    dialogConfig.data = c;
     const dialogRef = this.dialog.open(AddEventDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       if (!result) {
         return;
       }
-      if (result.apptTitle) {
-        this.calendar[index].event.push({
-          time: null,
-          title: result.apptTitle
-        });
+      if (result) {
+        if (result.allDay) { // for multiple days
+          let startIndex = -1, endIndex = -1;
+          this.calendar.forEach((item, index) => {
+            if (item.date.toDateString() === result.startDay.toDateString()) {
+              startIndex = index;
+            }
+            if (item.date.toDateString() === result.endDay.toDateString()) {
+              endIndex = index;
+            }
+          })
+          console.log('startIndex ==', startIndex + '-------endIndex ===', endIndex);
+          for (let i = startIndex; i <= endIndex; i++) {
+            this.calendar[i].event.push({
+              title: result.apptTitle,
+            });
+          }
+        } else {
+          let tgtIndex = -1;
+          this.calendar.forEach((item, index) => {
+            if (item.date.toDateString() === result.singleDay.toDateString()) {
+              tgtIndex = index;
+            }
+          })
+          console.log(tgtIndex);
+          this.calendar[tgtIndex].event.push({
+            title: result.apptTitle,
+            startTime: result.startTime,
+            endTime: result.endTime
+          });
+          this.calendar[tgtIndex].event.sort((a,b) => Date.parse('1970/01/01 ' + a.startTime) - Date.parse('1970/01/01 ' + b.startTime));
+          console.log(this.calendar[tgtIndex]);
+        }
       }
     });
 
