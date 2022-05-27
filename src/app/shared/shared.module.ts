@@ -10,15 +10,18 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatSelectModule} from '@angular/material/select';
+import { EditEventDialogComponent } from './edit-event-dialog/edit-event-dialog.component';
+import {MatIconModule} from '@angular/material/icon';
 
 
 
 @NgModule({
-  declarations: [ChunkPipe, AddEventDialogComponent],
+  declarations: [ChunkPipe, AddEventDialogComponent, EditEventDialogComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatDialogModule, MatInputModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatNativeDateModule, MatSelectModule
+    MatDialogModule, MatInputModule, MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatNativeDateModule, MatSelectModule,
+    MatIconModule
   ],
   exports: [
     ChunkPipe

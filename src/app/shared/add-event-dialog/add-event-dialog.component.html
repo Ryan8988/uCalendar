@@ -1,4 +1,4 @@
-<div class="add-event-div" [formGroup]="appointmentForm">
+<div *ngIf="actionData === 'add'" class="add-event-div" [formGroup]="appointmentForm">
   <mat-form-field class="" appearance="fill">
     <mat-label>Title</mat-label>
     <input matInput maxlength="256" formControlName="apptTitle">
@@ -39,13 +39,33 @@
       </mat-select>
     </mat-form-field>
   </div>
-  <mat-form-field class="" appearance="fill">
+  <mat-checkbox (change)="checkAllday($event.checked)" formControlName="allDay">All day</mat-checkbox>
+  <mat-form-field class="description" appearance="fill">
     <mat-label>Add Description</mat-label>
     <textarea matInput placeholder="" formControlName="description"></textarea>
   </mat-form-field>
-  <mat-checkbox (change)="checkAllday($event.checked)" formControlName="allDay">All day</mat-checkbox>
+
   <div class="action-btns">
     <button mat-raised-button color="warn" class="cancelBtn" type="button" (click)="onCancelClick()">Cancel</button>
     <button mat-raised-button color="primary" class="saveBtn" type="button" (click)="onSaveClick()">Save</button>
+  </div>
+</div>
+
+<div *ngIf="actionData === 'edit'" class="edit-event-div">
+  <div class="edit-event-header">
+    <mat-icon matSuffix class="edit-icon" (click)="onEditClick(apptData)" style="cursor: pointer">edit</mat-icon>
+    <mat-icon matSuffix (click)="onDeleteClick()" style="cursor: pointer">delete</mat-icon>
+    <mat-icon matSuffix (click)="onCancelClick()" style="cursor: pointer">close</mat-icon>
+  </div>
+  <div class="edit-event-content">
+    <div class="edit-title"><mat-icon class="edit-content-icon">title</mat-icon>
+      <span>{{apptData.title}}</span>
+    </div>
+    <div class="edit-date-time"><mat-icon class="edit-content-icon">date_range</mat-icon>
+      <span>{{apptData.startDay | date: 'MMM d, y'}} . {{apptData.startTime}} - {{apptData.endTime}}</span>
+    </div>
+    <div class="edit-description"><mat-icon class="edit-content-icon">description</mat-icon>
+      <span>{{apptData.description}}</span>
+    </div>
   </div>
 </div>

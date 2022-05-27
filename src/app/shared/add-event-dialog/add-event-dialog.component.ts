@@ -10,22 +10,25 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 export class AddEventDialogComponent implements OnInit {
   appointmentForm: FormGroup;
   alldayChecked = false;
-  passedData;
+  apptData;
   timeOptions;
+  actionData;
+  originalAppt;
   constructor(@Inject(MAT_DIALOG_DATA) data,
               private dialogRef: MatDialogRef<AddEventDialogComponent>,
               private fb: FormBuilder) {
     console.log(data);
-    this.passedData = data;
+    this.actionData = data.action;
+    this.apptData = data.appt;
     this.appointmentForm = this.fb.group({
-      apptTitle: data.title,
-      allDay: false,
-      startDay: data.date,
-      endDay: null,
-      singleDay: data.date,
-      startTime: null,
-      endTime: null,
-      description: null
+      apptTitle: this.apptData.title,
+      allDay: this.apptData.allDay || false,
+      startDay: this.apptData.date,
+      endDay: this.apptData.endDay,
+      singleDay: this.apptData.date,
+      startTime: this.apptData.startTime,
+      endTime: this.apptData.endTime,
+      description: this.apptData.description
     });
     this.timeOptions = this.getListofTimeslot();
   }
@@ -33,9 +36,13 @@ export class AddEventDialogComponent implements OnInit {
   ngOnInit(): void {
   }
   onSaveClick(): void {
-    this.dialogRef.close(this.appointmentForm.value);
+    this.dialogRef.close({
+      toRemove: this.originalAppt,
+      toAdd: this.appointmentForm.value
+    });
   }
   onCancelClick(): void {
+    this.originalAppt = {};
     this.dialogRef.close();
   }
   checkAllday(e): void {
@@ -51,7 +58,15 @@ export class AddEventDialogComponent implements OnInit {
       date.setMinutes(i);
       res.push(date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}));
     }
-    console.log(res);
     return res;
   }
+  onEditClick(apptData): void {
+    this.actionData = 'add';
+    console.log(apptData);
+    this.originalAppt = apptData;
+  }
+  onDeleteClick(): void {
+
+  }
+
 }

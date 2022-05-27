@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {CalendarDay} from '../shared/models/calendarDay.model';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {AddEventDialogComponent} from '../shared/add-event-dialog/add-event-dialog.component';
+import {EditEventDialogComponent} from "../shared/edit-event-dialog/edit-event-dialog.component";
 
 @Component({
   selector: 'app-monthview',
@@ -36,16 +37,26 @@ export class MonthviewComponent implements OnInit {
     let dateToAdd = startingDateOfCalendar;
 
     for (let i = 0; i < 35; i++) {
-      const createEvent = [{
-        startTime: '4:00 pm',
-        endTime: '4:30 pm',
-        title: 'Dr.appt'
-      }, {
-        startTime: '4:30 pm',
-        endTime: '5:30 pm',
-        title: 'test'
-      }]
-      if (i === 5 || i === 10) {
+      if (i === 15 || i === 10) {
+        const createEvent = [{
+          startDay: new Date(dateToAdd),
+          endDay: new Date(dateToAdd),
+          date: new Date(dateToAdd),
+          startTime: '04:00 PM',
+          endTime: '04:30 PM',
+          title: 'Dr.appt',
+          description: 'I will OOO for doctor appointment today',
+          allDay: false
+        }, {
+          startDay: new Date(dateToAdd),
+          endDay: new Date(dateToAdd),
+          date: new Date(dateToAdd),
+          startTime: '01:00 AM',
+          endTime: '02:30 AM',
+          title: 'Wait',
+          description: 'Wake up',
+          allDay: false
+        }]
         this.calendar.push(new CalendarDay(new Date(dateToAdd), createEvent));
       } else {
         this.calendar.push(new CalendarDay(new Date(dateToAdd), []));
@@ -92,55 +103,85 @@ export class MonthviewComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '40%';
     dialogConfig.autoFocus = false;
-    dialogConfig.data = day;
+    dialogConfig.data =  {
+      action: 'add',
+      appt: day
+    };
     const dialogRef = this.dialog.open(AddEventDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-      if (!result) {
-        return;
-      }
-      if (result) {
-        if (result.allDay) { // for multiple days
-          let startIndex = -1, endIndex = -1;
-          this.calendar.forEach((item, index) => {
-            if (item.date.toDateString() === result.startDay.toDateString()) {
-              startIndex = index;
-            }
-            if (item.date.toDateString() === result.endDay.toDateString()) {
-              endIndex = index;
-            }
-          })
-          console.log('startIndex ==', startIndex + '-------endIndex ===', endIndex);
-          for (let i = startIndex; i <= endIndex; i++) {
-            this.calendar[i].event.push({
-              title: result.apptTitle,
-            });
-          }
-        } else { // for single day
-          let tgtIndex = -1;
-          this.calendar.forEach((item, index) => {
-            if (item.date.toDateString() === result.singleDay.toDateString()) {
-              tgtIndex = index;
-            }
-          })
-          console.log(tgtIndex);
-          this.calendar[tgtIndex].event.push({
-            title: result.apptTitle,
-            startTime: result.startTime,
-            endTime: result.endTime,
-            description: result.description
-          });
-          this.calendar[tgtIndex].event.sort((a,b) => Date.parse('1970/01/01 ' + a.startTime) - Date.parse('1970/01/01 ' + b.startTime));
-        }
-        console.log(this.calendar);
-      }
+      this.displayApptInCalendar(result.toAdd);
     });
 
 
   }
 
-  editEvent(event, $event) {
+  editEvent(event, $event): void {
     console.log(event);
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '40%';
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      action: 'edit',
+      appt: event
+    }
+    const dialogRef = this.dialog.open(AddEventDialogComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      this.displayApptInCalendar(result.toAdd, result.toRemove);
+    })
     $event.stopPropagation();
+  }
+
+  displayApptInCalendar(result, toRemove?): void {
+    if (!result) {
+      return;
+    }
+    if (result) {
+      if (result.allDay) { // for multiple days
+        let startIndex = -1, endIndex = -1;
+        this.calendar.forEach((item, index) => {
+          if (item.date.toDateString() === result.startDay.toDateString()) {
+            startIndex = index;
+          }
+          if (item.date.toDateString() === result.endDay.toDateString()) {
+            endIndex = index;
+          }
+        })
+        console.log('startIndex ==', startIndex + '-------endIndex ===', endIndex);
+        for (let i = startIndex; i <= endIndex; i++) {
+          this.calendar[i].event.push({
+            title: result.apptTitle,
+            allDay: result.allDay
+          });
+        }
+      } else { // for single day
+        let tgtIndex = -1, removeIndex = -1;
+        this.calendar.forEach((item, index) => {
+          if (item.date.toDateString() === result.singleDay.toDateString()) {
+            tgtIndex = index;
+          }
+          if (toRemove && item.date.toDateString() === toRemove.date.toDateString()) {
+            removeIndex = index;
+          }
+        })
+        if (toRemove) {
+          let newEvent = this.calendar[removeIndex].event.filter(el => el.title !== toRemove.title);
+          this.calendar[removeIndex].event = newEvent;
+        }
+        this.calendar[tgtIndex].event.push({
+          title: result.apptTitle,
+          startTime: result.startTime,
+          endTime: result.endTime,
+          description: result.description,
+          allDay: result.allDay,
+          startDay: result.startDay,
+          endDay: result.endDay,
+          date: result.singleDay
+        });
+        this.calendar[tgtIndex].event.sort((a,b) => Date.parse('1970/01/01 ' + a.startTime) - Date.parse('1970/01/01 ' + b.startTime));
+      }
+      console.log(this.calendar);
+    }
   }
 }
