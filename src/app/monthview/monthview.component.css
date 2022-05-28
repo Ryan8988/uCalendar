@@ -94,6 +94,7 @@
   font-weight: 400;
   line-height: 36px;
   margin: 0 20px;
+  width: 15%;
 }
 .calendar-div {
   height: calc(100% - 64px);
@@ -182,4 +183,8 @@
 .fake-event {
   opacity: 0;
   pointer-events: none;
+}
+.inner-span {
+  white-space: nowrap;
+  overflow: hidden;
 }

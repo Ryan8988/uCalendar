@@ -9,12 +9,13 @@ import {AddEventDialogComponent} from '../shared/add-event-dialog/add-event-dial
   styleUrls: ['./monthview.component.css']
 })
 export class MonthviewComponent implements OnInit {
-  public calendar: CalendarDay[] = [];
-  public monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+  calendar: CalendarDay[] = [];
+  monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
-  public displayMonth: string;
-  private monthIndex = 0;
+  displayMonth: string;
+  displayYear: number;
+  monthIndex = 0;
   constructor(public dialog: MatDialog) {
     this.generateCalendarDays(this.monthIndex);
   }
@@ -30,7 +31,7 @@ export class MonthviewComponent implements OnInit {
     const day: Date = new Date(new Date().setMonth(new Date().getMonth() + monthIndex));
 
     this.displayMonth = this.monthNames[day.getMonth()];
-
+    this.displayYear = day.getFullYear();
     const startingDateOfCalendar = this.getStartDateForCalendar(day);
 
     let dateToAdd = startingDateOfCalendar;

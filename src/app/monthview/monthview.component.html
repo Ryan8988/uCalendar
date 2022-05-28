@@ -1,6 +1,6 @@
 <div class="demo">
   <div class="header-div">
-    <div class="currentMonth">{{displayMonth}}</div>
+    <div class="currentMonth">{{displayMonth}} - {{displayYear}}</div>
     <div class="header-btns-div">
       <button mat-raised-button class="todayBtn" type="button" (click)="getCurrentDay()">Today</button>
       <mat-icon (click)="previousMonth()">chevron_left</mat-icon>
@@ -29,11 +29,11 @@
               <div *ngFor="let event of day.event; let topIndex = index" (click)="editEvent(event, $event)"
                    [ngStyle]="{'top':'calc(' + topIndex + 'em + ' + (topIndex + 20) + 'px)'}"
                    [ngClass]="{'multi-days': event.allDay, 'single-day': !event.allDay, 'fake-event': (event | json) === '{}'}">
-                <span *ngIf="!event.allDay">
+                <span class="inner-span" *ngIf="!event.allDay">
                   <span class="dot-div"></span>
                   <span>{{event.startTime}} {{event.title}}</span>
                 </span>
-                <span *ngIf="event.allDay && event.date.toDateString() === event.startDay.toDateString()">
+                <span class="inner-span" *ngIf="event.allDay && event.date.toDateString() === event.startDay.toDateString()">
                   <span>{{event.title}}</span>
                 </span>
               </div>
