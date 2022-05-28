@@ -2,3 +2,8 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.not-all-day-div .mat-form-field-flex {
+  display: flex;
+  align-items: center;
+}

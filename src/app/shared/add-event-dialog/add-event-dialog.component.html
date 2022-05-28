@@ -44,6 +44,19 @@
     <mat-label>Add Description</mat-label>
     <textarea matInput placeholder="" formControlName="description"></textarea>
   </mat-form-field>
+  <mat-form-field class="location" appearance="fill">
+    <mat-label>Add Location</mat-label>
+    <input matInput placeholder="" [matAutocomplete]="auto" formControlName="location">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+      <ng-container *ngIf="!isLoading">
+        <mat-option *ngFor="let location of locationOptions" [value]="location">
+          <span>{{location.ShortString}}</span>
+        </mat-option>
+      </ng-container>
+    </mat-autocomplete>
+  </mat-form-field>
+
 
   <div class="action-btns">
     <button mat-raised-button color="warn" class="cancelBtn" type="button" (click)="onCancelClick()">Cancel</button>
@@ -62,10 +75,22 @@
       <span>{{apptData.title}}</span>
     </div>
     <div class="edit-date-time"><mat-icon class="edit-content-icon">date_range</mat-icon>
-      <span>{{apptData.startDay | date: 'MMM d, y'}} . {{apptData.startTime}} - {{apptData.endTime}}</span>
+      <div *ngIf="apptData.allDay">
+        <span>{{apptData.startDay | date: 'MMM d, y'}} - {{apptData.endDay | date: 'MMM d, y'}}</span>
+      </div>
+      <div *ngIf="!apptData.allDay">
+        <span>{{apptData.startDay | date: 'MMM d, y'}}</span>
+        <span> . </span>
+        <span *ngIf="apptData.startTime">{{apptData.startTime}} - {{apptData.endTime}}</span>
+      </div>
     </div>
     <div class="edit-description"><mat-icon class="edit-content-icon">description</mat-icon>
       <span>{{apptData.description}}</span>
     </div>
+    <div class="edit-location" *ngIf="location"><mat-icon class="edit-content-icon">location_on</mat-icon>
+      <app-trimble-maps [location]="location"></app-trimble-maps>
+    </div>
   </div>
+
+
 </div>

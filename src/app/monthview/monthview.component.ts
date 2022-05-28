@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {CalendarDay} from '../shared/models/calendarDay.model';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {AddEventDialogComponent} from '../shared/add-event-dialog/add-event-dialog.component';
-import {EditEventDialogComponent} from "../shared/edit-event-dialog/edit-event-dialog.component";
 
 @Component({
   selector: 'app-monthview',
@@ -11,8 +10,8 @@ import {EditEventDialogComponent} from "../shared/edit-event-dialog/edit-event-d
 })
 export class MonthviewComponent implements OnInit {
   public calendar: CalendarDay[] = [];
-  public monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+  public monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
   ];
   public displayMonth: string;
   private monthIndex = 0;
@@ -42,21 +41,44 @@ export class MonthviewComponent implements OnInit {
           startDay: new Date(dateToAdd),
           endDay: new Date(dateToAdd),
           date: new Date(dateToAdd),
-          startTime: '04:00 PM',
-          endTime: '04:30 PM',
+          startTime: '11:00 AM',
+          endTime: '11:30 AM',
           title: 'Dr.appt',
           description: 'I will OOO for doctor appointment today',
+          location: {
+            Address: {
+              StreetAddress: '1 Independence Way',
+              City: 'Princeton',
+              State: 'NJ',
+              StateName: 'New Jersey',
+              Zip: '08540',
+              County: 'Mercer',
+              Country: 'US',
+              CountryFullName: 'United States',
+              SPLC: null
+            },
+            Coords: {
+              Lat: '40.361007',
+              Lon: '-74.599268'
+            },
+            Region: 4,
+            POITypeID: 1128,
+            PersistentPOIID: 2014,
+            SiteID: -1,
+            ResultType: 10,
+            ShortString: 'Trimble MAPS, 1 Independence Way, Princeton, NJ, US, Mercer 08540'
+          },
           allDay: false
         }, {
           startDay: new Date(dateToAdd),
           endDay: new Date(dateToAdd),
           date: new Date(dateToAdd),
-          startTime: '01:00 AM',
-          endTime: '02:30 AM',
+          startTime: '03:00 PM',
+          endTime: '04:00 PM',
           title: 'Wait',
           description: 'Wake up',
           allDay: false
-        }]
+        }];
         this.calendar.push(new CalendarDay(new Date(dateToAdd), createEvent));
       } else {
         this.calendar.push(new CalendarDay(new Date(dateToAdd), []));
@@ -110,6 +132,9 @@ export class MonthviewComponent implements OnInit {
     const dialogRef = this.dialog.open(AddEventDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
+      if (!result) {
+        return;
+      }
       this.displayApptInCalendar(result.toAdd);
     });
 
@@ -124,12 +149,15 @@ export class MonthviewComponent implements OnInit {
     dialogConfig.data = {
       action: 'edit',
       appt: event
-    }
+    };
     const dialogRef = this.dialog.open(AddEventDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
+      if (!result) {
+        return;
+      }
       this.displayApptInCalendar(result.toAdd, result.toRemove);
-    })
+    });
     $event.stopPropagation();
   }
 
@@ -139,7 +167,10 @@ export class MonthviewComponent implements OnInit {
     }
     if (result) {
       if (result.allDay) { // for multiple days
-        let startIndex = -1, endIndex = -1;
+        let startIndex = -1;
+        let endIndex = -1;
+        let removeStartIndex = -1;
+        let removeEndIndex = -1;
         this.calendar.forEach((item, index) => {
           if (item.date.toDateString() === result.startDay.toDateString()) {
             startIndex = index;
@@ -147,13 +178,42 @@ export class MonthviewComponent implements OnInit {
           if (item.date.toDateString() === result.endDay.toDateString()) {
             endIndex = index;
           }
-        })
-        console.log('startIndex ==', startIndex + '-------endIndex ===', endIndex);
+          if (toRemove && item.date.toDateString() === toRemove.startDay.toDateString()) {
+            removeStartIndex = index;
+          }
+          if (toRemove && item.date.toDateString() === toRemove.endDay.toDateString()) {
+            removeEndIndex = index;
+          }
+        });
+        if (toRemove) {
+          for (let i = removeStartIndex; i <= removeEndIndex; i++) {
+            const newEvent = this.calendar[i].event.filter(el => el.title !== toRemove.title);
+            this.calendar[i].event = newEvent;
+          }
+        }
+        let height = 0;
         for (let i = startIndex; i <= endIndex; i++) {
-          this.calendar[i].event.push({
-            title: result.apptTitle,
-            allDay: result.allDay
-          });
+          height = Math.max(height, this.calendar[i].event.length);
+        }
+        console.log('height ====', height);
+        for (let i = startIndex; i <= endIndex; i++) {
+          for (let j = 0; j <= height; j++) {
+            if (j === height) {
+              this.calendar[i].event.push({
+                title: result.apptTitle,
+                allDay: result.allDay,
+                startDay: result.startDay,
+                endDay: result.endDay,
+                date: this.calendar[i].date,
+                description: result.description,
+                location: result.location,
+              });
+            } else {
+              if (!this.calendar[i].event[j]) { // exclude existing event
+                this.calendar[i].event.push({});
+              }
+            }
+          }
         }
       } else { // for single day
         let tgtIndex = -1, removeIndex = -1;
@@ -164,24 +224,26 @@ export class MonthviewComponent implements OnInit {
           if (toRemove && item.date.toDateString() === toRemove.date.toDateString()) {
             removeIndex = index;
           }
-        })
-        if (toRemove) {
-          let newEvent = this.calendar[removeIndex].event.filter(el => el.title !== toRemove.title);
+        });
+        if (toRemove) { // for editing existing appointment, we need to remove the original one
+          const newEvent = this.calendar[removeIndex].event.filter(el => el.title !== toRemove.title);
           this.calendar[removeIndex].event = newEvent;
         }
         this.calendar[tgtIndex].event.push({
           title: result.apptTitle,
-          startTime: result.startTime,
-          endTime: result.endTime,
-          description: result.description,
           allDay: result.allDay,
           startDay: result.startDay,
           endDay: result.endDay,
-          date: result.singleDay
+          date: result.singleDay,
+          description: result.description,
+          location: result.location,
+          startTime: result.startTime,
+          endTime: result.endTime,
         });
-        this.calendar[tgtIndex].event.sort((a,b) => Date.parse('1970/01/01 ' + a.startTime) - Date.parse('1970/01/01 ' + b.startTime));
+        this.calendar[tgtIndex].event.sort((a, b) => Date.parse('1970/01/01 ' + a.startTime) - Date.parse('1970/01/01 ' + b.startTime));
       }
       console.log(this.calendar);
     }
   }
+
 }

@@ -26,7 +26,17 @@
               <strong *ngIf="day.isToday || (i==0 && j==0) || (day.date.getDate() == 1)"> {{monthNames[day.date.getMonth()]}}</strong>
             </div>
             <div class="appt-list-div">
-              <li *ngFor="let event of day.event" (click)="editEvent(event, $event)">{{event.startTime}} {{event.title}}</li>
+              <div *ngFor="let event of day.event; let topIndex = index" (click)="editEvent(event, $event)"
+                   [ngStyle]="{'top':'calc(' + topIndex + 'em + ' + (topIndex + 20) + 'px)'}"
+                   [ngClass]="{'multi-days': event.allDay, 'single-day': !event.allDay, 'fake-event': (event | json) === '{}'}">
+                <span *ngIf="!event.allDay">
+                  <span class="dot-div"></span>
+                  <span>{{event.startTime}} {{event.title}}</span>
+                </span>
+                <span *ngIf="event.allDay && event.date.toDateString() === event.startDay.toDateString()">
+                  <span>{{event.title}}</span>
+                </span>
+              </div>
             </div>
           </div>
         </div>

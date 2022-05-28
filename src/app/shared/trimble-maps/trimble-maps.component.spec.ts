@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditEventDialogComponent } from './edit-event-dialog.component';
+import { TrimbleMapsComponent } from './trimble-maps.component';
 
-describe('EditEventDialogComponent', () => {
-  let component: EditEventDialogComponent;
-  let fixture: ComponentFixture<EditEventDialogComponent>;
+describe('TrimbleMapsComponent', () => {
+  let component: TrimbleMapsComponent;
+  let fixture: ComponentFixture<TrimbleMapsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditEventDialogComponent ]
+      declarations: [ TrimbleMapsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditEventDialogComponent);
+    fixture = TestBed.createComponent(TrimbleMapsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

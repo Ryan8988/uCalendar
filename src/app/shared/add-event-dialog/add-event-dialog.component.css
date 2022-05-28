@@ -29,7 +29,7 @@
   cursor: pointer;
 }
 
-.edit-title, .edit-date-time, .edit-description {
+.edit-title, .edit-date-time, .edit-description, .edit-location {
   display: flex;
   align-items: center;
   margin: 10px 0;
@@ -42,4 +42,5 @@
   margin-right: 20px;
   color: gray;
 }
+
 

@@ -89,7 +89,6 @@
   background: #dadce0;
 }
 .currentMonth {
-  width: 36px;
   height: 36px;
   font-size: 22px;
   font-weight: 400;
@@ -143,11 +142,14 @@
 .blue-date {
   color: rgb(16, 110, 190);
 }
-.calendar-day li {
+.appt-list-div div {
   background-color: rgb(121, 134, 203);;
-  padding: 0 10px;
+  padding: 0 5px;
   color: white;
-  margin: 3px 0;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  height: 1em;
 }
 .calendar-day-wrapper {
   width: 100%;
@@ -156,4 +158,28 @@
 .appt-list-div {
   overflow: auto;
   height: calc(100% - 20px);
+}
+.multi-days {
+  position: absolute;
+  width: calc(100% / 7);
+  box-sizing: border-box;
+  height: 1em;
+}
+.single-day {
+  position: absolute;
+  width: calc(100% / 7);
+  box-sizing: border-box;
+  height: 1em;
+}
+.dot-div {
+  border-radius: 8px;
+  border: rgb(215, 219, 239) 4px solid;
+  height: 0;
+  width: 0;
+  margin-right: 5px;
+  display: inline-block;
+}
+.fake-event {
+  opacity: 0;
+  pointer-events: none;
 }

@@ -1,5 +1,5 @@
 export class CalendarEvent {
-  title: string;
+  title?: string;
   date?: Date;
   startTime?: string;
   endTime?: string;
@@ -7,6 +7,7 @@ export class CalendarEvent {
   startDay?: Date;
   endDay?: Date;
   allDay?: boolean;
+  location?: string;
   constructor() {
   }
 }
