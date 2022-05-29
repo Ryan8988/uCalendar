@@ -217,24 +217,31 @@ export class MonthviewComponent implements OnInit {
           }
         }
       } else { // for single day
-        let tgtIndex = -1, removeIndex = -1;
+        let tgtIndex = -1;
+        let removeStartIndex = -1;
+        let removeEndIndex = -1;
         this.calendar.forEach((item, index) => {
           if (item.date.toDateString() === result.singleDay.toDateString()) {
             tgtIndex = index;
           }
-          if (toRemove && item.date.toDateString() === toRemove.date.toDateString()) {
-            removeIndex = index;
+          if (toRemove && item.date.toDateString() === toRemove.startDay.toDateString()) {
+            removeStartIndex = index;
+          }
+          if (toRemove && item.date.toDateString() === toRemove.endDay.toDateString()) {
+            removeEndIndex = index;
           }
         });
-        if (toRemove) { // for editing existing appointment, we need to remove the original one
-          const newEvent = this.calendar[removeIndex].event.filter(el => el.title !== toRemove.title);
-          this.calendar[removeIndex].event = newEvent;
+        if (toRemove) {
+          for (let i = removeStartIndex; i <= removeEndIndex; i++) {
+            const newEvent = this.calendar[i].event.filter(el => el.title !== toRemove.title);
+            this.calendar[i].event = newEvent;
+          }
         }
         this.calendar[tgtIndex].event.push({
           title: result.apptTitle,
           allDay: result.allDay,
-          startDay: result.startDay,
-          endDay: result.endDay,
+          startDay: result.singleDay,
+          endDay: result.singleDay,
           date: result.singleDay,
           description: result.description,
           location: result.location,

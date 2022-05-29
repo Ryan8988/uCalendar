@@ -9,7 +9,7 @@ import SingleSearch from '@trimblemaps/trimblemaps-singlesearch';
 export class TrimbleMapsComponent implements OnInit, OnChanges {
   @Input() location;
 
-  map: object;
+  map;
   constructor() {
 
   }
@@ -32,7 +32,7 @@ export class TrimbleMapsComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes);
-    console.log(this.map)
+    console.log(this.map);
   }
 
 }

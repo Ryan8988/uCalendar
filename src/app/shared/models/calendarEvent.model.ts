@@ -7,7 +7,7 @@ export class CalendarEvent {
   startDay?: Date;
   endDay?: Date;
   allDay?: boolean;
-  location?: string;
+  location?: any;
   constructor() {
   }
 }
