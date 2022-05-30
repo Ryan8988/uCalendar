@@ -12,7 +12,7 @@ export class MapService {
   singleSearch(address): any {
     const uri = this.singleSearchUri;
     const params = {query: address};
-    return this.http.get<any>(uri, {params, withCredentials: true});
+    return this.http.get<any>(uri, {params});
   }
 
 }
