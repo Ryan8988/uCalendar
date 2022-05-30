@@ -29,7 +29,7 @@
   cursor: pointer;
 }
 
-.edit-title, .edit-date-time, .edit-description, .edit-location {
+.edit-title, .edit-date-time, .edit-description, .edit-location, .edit-color {
   display: flex;
   align-items: center;
   margin: 10px 0;
@@ -43,4 +43,10 @@
   color: gray;
 }
 
-
+.color-field {
+  width: 45px;
+}
+.color-circle {
+  width: 20px;
+  height: 20px;
+}

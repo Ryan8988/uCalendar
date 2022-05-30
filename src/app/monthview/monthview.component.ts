@@ -46,6 +46,7 @@ export class MonthviewComponent implements OnInit {
           endTime: '11:30 AM',
           title: 'Dr.appt',
           description: 'I will OOO for doctor appointment today',
+          color: '#7987cb',
           location: {
             Address: {
               StreetAddress: '1 Independence Way',
@@ -78,6 +79,7 @@ export class MonthviewComponent implements OnInit {
           endTime: '04:00 PM',
           title: 'Wait',
           description: 'Wake up',
+          color: 'blue',
           allDay: false
         }];
         this.calendar.push(new CalendarDay(new Date(dateToAdd), createEvent));
@@ -188,7 +190,13 @@ export class MonthviewComponent implements OnInit {
         });
         if (toRemove) {
           for (let i = removeStartIndex; i <= removeEndIndex; i++) {
-            const newEvent = this.calendar[i].event.filter(el => el.title !== toRemove.title);
+            const newEvent = this.calendar[i].event.map((el) => {
+              if (el.title === toRemove.title) {
+                return {};
+              } else {
+                return el;
+              }
+            });
             this.calendar[i].event = newEvent;
           }
         }
@@ -208,6 +216,7 @@ export class MonthviewComponent implements OnInit {
                 date: this.calendar[i].date,
                 description: result.description,
                 location: result.location,
+                color: result.color
               });
             } else {
               if (!this.calendar[i].event[j]) { // exclude existing event
@@ -233,7 +242,15 @@ export class MonthviewComponent implements OnInit {
         });
         if (toRemove) {
           for (let i = removeStartIndex; i <= removeEndIndex; i++) {
-            const newEvent = this.calendar[i].event.filter(el => el.title !== toRemove.title);
+            //const newEvent = this.calendar[i].event.filter(el => el.title !== toRemove.title);
+            //this.calendar[i].event = newEvent;
+            const newEvent = this.calendar[i].event.map((el) => {
+              if (el.title === toRemove.title) {
+                return {};
+              } else {
+                return el;
+              }
+            });
             this.calendar[i].event = newEvent;
           }
         }
@@ -247,6 +264,7 @@ export class MonthviewComponent implements OnInit {
           location: result.location,
           startTime: result.startTime,
           endTime: result.endTime,
+          color: result.color
         });
         this.calendar[tgtIndex].event.sort((a, b) => Date.parse('1970/01/01 ' + a.startTime) - Date.parse('1970/01/01 ' + b.startTime));
       }

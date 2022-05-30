@@ -1,4 +1,8 @@
 <div *ngIf="actionData === 'add'" class="add-event-div" [formGroup]="appointmentForm">
+  <mat-form-field class="color-field" appearance="fill">
+    <mat-label>Color</mat-label>
+    <input type="color" matInput maxlength="256" formControlName="color">
+  </mat-form-field>
   <mat-form-field class="" appearance="fill">
     <mat-label>Title</mat-label>
     <input matInput maxlength="256" formControlName="apptTitle">
@@ -71,6 +75,9 @@
     <mat-icon matSuffix (click)="onCancelClick()" style="cursor: pointer">close</mat-icon>
   </div>
   <div class="edit-event-content">
+    <div class="edit-color"><mat-icon class="edit-content-icon">palette</mat-icon>
+      <div class="color-circle" [ngStyle]="{'background-color': apptData.color}"></div>
+    </div>
     <div class="edit-title"><mat-icon class="edit-content-icon">title</mat-icon>
       <span>{{apptData.title}}</span>
     </div>

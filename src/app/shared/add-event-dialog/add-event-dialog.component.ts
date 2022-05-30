@@ -20,6 +20,7 @@ export class AddEventDialogComponent implements OnInit {
   locationOptions;
   isLoading = false;
   location;
+  defaultColor = '#7987cb';
   @ViewChild('#map', { static: true }) mapElement: ElementRef;
   constructor(@Inject(MAT_DIALOG_DATA) data,
               private dialogRef: MatDialogRef<AddEventDialogComponent>,
@@ -38,7 +39,8 @@ export class AddEventDialogComponent implements OnInit {
       startTime: this.apptData.startTime,
       endTime: this.apptData.endTime,
       description: this.apptData.description,
-      location: this.apptData.location
+      location: this.apptData.location,
+      color: this.apptData.color || this.defaultColor,
     });
     this.timeOptions = this.getListofTimeslot();
 
@@ -76,7 +78,7 @@ export class AddEventDialogComponent implements OnInit {
   onSaveClick(): void {
     this.dialogRef.close({
       toRemove: this.originalAppt,
-      toAdd: this.appointmentForm.value
+      toAdd: this.appointmentForm.value,
     });
   }
   onCancelClick(): void {

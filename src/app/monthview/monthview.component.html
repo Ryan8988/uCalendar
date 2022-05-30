@@ -27,7 +27,7 @@
             </div>
             <div class="appt-list-div">
               <div *ngFor="let event of day.event; let topIndex = index" (click)="editEvent(event, $event)"
-                   [ngStyle]="{'top':'calc(' + topIndex + 'em + ' + (topIndex + 20) + 'px)'}"
+                   [ngStyle]="{'top':'calc(' + topIndex + 'em + ' + (topIndex + 20) + 'px)', 'background-color' : event.color}"
                    [ngClass]="{'multi-days': event.allDay, 'single-day': !event.allDay, 'fake-event': (event | json) === '{}'}">
                 <span class="inner-span" *ngIf="!event.allDay">
                   <span class="dot-div"></span>

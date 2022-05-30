@@ -8,6 +8,7 @@ export class CalendarEvent {
   endDay?: Date;
   allDay?: boolean;
   location?: any;
+  color?: string;
   constructor() {
   }
 }
